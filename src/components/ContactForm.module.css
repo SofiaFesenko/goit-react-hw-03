@@ -1,0 +1,17 @@
+.formBlock {
+    display: flex;
+    flex-direction: column;
+    width: 250px;
+    gap: 5px;
+    padding: 10px;
+    border: 1px solid black;
+}
+
+.button {
+    width: 150px;
+    margin: auto;
+}
+
+.error {
+    color: red;
+}
