@@ -1,12 +1,10 @@
 import { nanoid } from 'nanoid';
 import { useEffect, useState } from 'react'
 
-import ContactForm from './components/ContactForm'
-import SearchBox from './components/SearchBox'
+import ContactForm from './components/ContactForm/ContactForm'
+import SearchBox from './components/SearchBox/SearchBox'
 
-import ContactList from './components/Contacts/ContactList'
-import Contact from './components/Contacts/Contact'
-
+import ContactList from './components/ContactList/ContactList'
 
 
 function App() {
@@ -15,8 +13,10 @@ function App() {
   const [contacts, setContacts] = useState([])
 
   useEffect(() => {
-    const localstorageItems = Object.keys(localStorage).map(key => JSON.parse(localStorage.getItem(key)))
-    setContacts(localstorageItems)
+    const localstorageItems = localStorage.getItem("contactsList")
+    if (localstorageItems !== null) {
+      setContacts(JSON.parse(localstorageItems))
+    }
   }, [])
 
   const hadnleInput = (event) => {
@@ -34,36 +34,33 @@ function App() {
       number: values.number
     }
 
-    localStorage.setItem(newContact.id, JSON.stringify(newContact))
+    const newContacts = [...contacts, newContact]
+    setContacts(newContacts)
 
-    setContacts([...contacts, newContact])
+    localStorage.setItem("contactsList", JSON.stringify(newContacts))
     
     actions.resetForm()
   }
 
-  const filteredContacts = contacts.filter( contact => contact.name.toLowerCase().includes(inputValue))
+  const filteredContacts = contacts.filter( contact => contact.name.toLowerCase().includes(inputValue.toLowerCase()))
 
-  const getKey = idToDelete => {
-    localStorage.removeItem(idToDelete)
-    setContacts(() => {
-      return filteredContacts.filter(contact => contact.id != idToDelete)
-    })
-    
+  const onDelete = idToDelete => {
+    const afterDeletedContacts = contacts.filter(contact => contact.id != idToDelete)
+    setContacts(afterDeletedContacts)
+    localStorage.setItem("contactsList", JSON.stringify(afterDeletedContacts))
   }
 
   return (
     <>
       <h2>Phonebook</h2>
       <ContactForm handleSubmit={handleSubmit}/>
-      <SearchBox onchange={hadnleInput}/>
+      <SearchBox handleinput={hadnleInput}/>
 
-      <ContactList>
-        {filteredContacts.map( contact => {
-          return <Contact key={contact.id} name={contact.name} number={contact.number} id={contact.id} getKey={getKey}/>
-        })}
-      </ContactList>
+      <ContactList filteredContacts={filteredContacts} onDelete={onDelete} />
     </>
   )
 }
+
+
 
 export default App

@@ -1,3 +1,7 @@
+.contactsMainBlock {
+    width: 250px;
+}
+
 .contactBlock {
     display: flex;
     justify-content: space-between;
