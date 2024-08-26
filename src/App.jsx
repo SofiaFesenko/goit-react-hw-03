@@ -5,17 +5,30 @@ import ContactForm from './components/ContactForm/ContactForm'
 import SearchBox from './components/SearchBox/SearchBox'
 
 import ContactList from './components/ContactList/ContactList'
+import { useDispatch, useSelector } from 'react-redux';
+import { addProfile, deleteProfile } from './redux/contactsSlice';
 
 
 function App() {
 
   const [inputValue, setInputValue] = useState("")
-  const [contacts, setContacts] = useState([])
+  // const [contacts, setContacts] = useState([])
+
+
+  const dispatch = useDispatch()
+
+  const contacts = useSelector((state) => state.items.contacts.items)
+  console.log(contacts);
+  
 
   useEffect(() => {
     const localstorageItems = localStorage.getItem("contactsList")
     if (localstorageItems !== null) {
-      setContacts(JSON.parse(localstorageItems))
+      const localStorageContacts = JSON.parse(localstorageItems)
+      localStorageContacts.map(contact => {
+        dispatch(addProfile(contact))
+      })
+      // setContacts(JSON.parse(localstorageItems))
     }
   }, [])
 
@@ -35,7 +48,8 @@ function App() {
     }
 
     const newContacts = [...contacts, newContact]
-    setContacts(newContacts)
+    dispatch(addProfile(newContact))
+    // setContacts(newContacts)
 
     localStorage.setItem("contactsList", JSON.stringify(newContacts))
     
@@ -46,7 +60,8 @@ function App() {
 
   const onDelete = idToDelete => {
     const afterDeletedContacts = contacts.filter(contact => contact.id != idToDelete)
-    setContacts(afterDeletedContacts)
+    dispatch(deleteProfile(idToDelete))
+    // setContacts(afterDeletedContacts)
     localStorage.setItem("contactsList", JSON.stringify(afterDeletedContacts))
   }
 
