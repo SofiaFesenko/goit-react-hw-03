@@ -2,7 +2,7 @@ import * as Yup from "yup";
 import { nanoid } from 'nanoid';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { addContact } from "../../redux/contactsSlice";
 
 import css from './ContactForm.module.css'
@@ -10,7 +10,6 @@ import css from './ContactForm.module.css'
 function ContactForm() {
 
   const dispatch = useDispatch()
-  const contacts = useSelector((state) => state.contacts.contacts.items)
 
 
   const handleSubmit = (values, actions) => {
@@ -22,7 +21,6 @@ function ContactForm() {
     }
 
     dispatch(addContact(newContact))
-    localStorage.setItem("contactsList", JSON.stringify([...contacts, newContact]))
     actions.resetForm()
   }
 

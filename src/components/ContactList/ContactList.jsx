@@ -15,8 +15,6 @@ function ContactList() {
 
   const onDelete = idToDelete => {
     dispatch(deleteContact(idToDelete))
-    const afterDeletedContacts = contacts.filter(contact => contact.id != idToDelete)
-    localStorage.setItem("contactsList", JSON.stringify(afterDeletedContacts))
   }
 
   return (
