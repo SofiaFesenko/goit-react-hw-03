@@ -1,3 +1,5 @@
+import css from '../ContactForm/ContactForm.module.css'
+
 function Contact({onDelete, name, number, id}) {
     return (
         <div className={css.contactBlock}>

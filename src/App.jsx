@@ -1,41 +1,37 @@
 import { nanoid } from 'nanoid';
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
 
 import ContactForm from './components/ContactForm/ContactForm'
 import SearchBox from './components/SearchBox/SearchBox'
 
 import ContactList from './components/ContactList/ContactList'
 import { useDispatch, useSelector } from 'react-redux';
-import { addProfile, deleteProfile } from './redux/contactsSlice';
+import { addContact, deleteContact } from './redux/contactsSlice';
+import { changeFilter } from './redux/filtersSlice';
 
 
 function App() {
 
-  const [inputValue, setInputValue] = useState("")
-  // const [contacts, setContacts] = useState([])
-
-
   const dispatch = useDispatch()
-
-  const contacts = useSelector((state) => state.items.contacts.items)
+  const contacts = useSelector((state) => state.contacts.contacts.items)
   console.log(contacts);
-  
+  const filter = useSelector(state => state.filters.filters.name)
+  console.log(filter);
+
 
   useEffect(() => {
     const localstorageItems = localStorage.getItem("contactsList")
     if (localstorageItems !== null) {
       const localStorageContacts = JSON.parse(localstorageItems)
       localStorageContacts.map(contact => {
-        dispatch(addProfile(contact))
+        dispatch(addContact(contact))
       })
-      // setContacts(JSON.parse(localstorageItems))
     }
-  }, [])
+  }, [dispatch])
 
   const hadnleInput = (event) => {
     const value = event.target.value
-    
-    setInputValue(value)
+    dispatch(changeFilter(value))
   }
 
 
@@ -47,21 +43,16 @@ function App() {
       number: values.number
     }
 
-    const newContacts = [...contacts, newContact]
-    dispatch(addProfile(newContact))
-    // setContacts(newContacts)
-
-    localStorage.setItem("contactsList", JSON.stringify(newContacts))
-    
+    dispatch(addContact(newContact))
+    localStorage.setItem("contactsList", JSON.stringify([...contacts, newContact]))
     actions.resetForm()
   }
 
-  const filteredContacts = contacts.filter( contact => contact.name.toLowerCase().includes(inputValue.toLowerCase()))
+  const filteredContacts = contacts.filter( contact => contact.name && contact.name.toLowerCase().includes(filter.toLowerCase()))
 
   const onDelete = idToDelete => {
+    dispatch(deleteContact(idToDelete))
     const afterDeletedContacts = contacts.filter(contact => contact.id != idToDelete)
-    dispatch(deleteProfile(idToDelete))
-    // setContacts(afterDeletedContacts)
     localStorage.setItem("contactsList", JSON.stringify(afterDeletedContacts))
   }
 

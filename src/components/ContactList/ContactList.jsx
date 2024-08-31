@@ -1,3 +1,4 @@
+import Contact from '../Contact/Contact'
 import css from './ContactList.module.css'
 
 function ContactList({filteredContacts, onDelete}) {
@@ -6,11 +7,7 @@ function ContactList({filteredContacts, onDelete}) {
       {filteredContacts.map( contact => {
         return (
           <div className={css.contactBlock}>
-            <div>
-              <span>🎅 {contact.name}</span> <br/>
-              <span>📞 {contact.number}</span> 
-            </div>
-            <button type="button" onClick={() => onDelete(contact.id)}>delete</button> 
+            <Contact name={contact.name} number={contact.number} id={contact.id} onDelete={onDelete}/>
           </div>        
         )
       })}
