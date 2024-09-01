@@ -13,16 +13,12 @@ function ContactList() {
 
   const filteredContacts = contacts.filter( contact => contact.name && contact.name.toLowerCase().includes(filter.toLowerCase()))
 
-  const onDelete = idToDelete => {
-    dispatch(deleteContact(idToDelete))
-  }
-
   return (
     <div className={css.contactsMainBlock}>
       {filteredContacts.map( contact => {
         return (
           <div className={css.contactBlock}>
-            <Contact name={contact.name} number={contact.number} id={contact.id} onDelete={onDelete}/>
+            <Contact name={contact.name} number={contact.number} id={contact.id} />
           </div>        
         )
       })}

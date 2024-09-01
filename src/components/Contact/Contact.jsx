@@ -1,7 +1,8 @@
 import { useDispatch } from 'react-redux'
 import css from '../ContactForm/ContactForm.module.css'
+import { deleteContact } from '../../redux/contactsSlice'
 
-function Contact({onDelete, name, number, id}) {
+function Contact({ name, number, id }) {
     const dispatch = useDispatch()
 
     return (
@@ -10,7 +11,7 @@ function Contact({onDelete, name, number, id}) {
                 <span>🎅 {name}</span> <br/>
                 <span>📞 {number}</span> 
             </div>
-            <button type="button" onClick={() => onDelete(id)}>delete</button> 
+            <button type="button" onClick={() => dispatch(deleteContact(id))}>delete</button>
         </div>        
     )
 }
